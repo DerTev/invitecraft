@@ -8,9 +8,9 @@
 
 (defn open-rcon-client []
   (let [rcon-client (Rcon/open @hostname @port)]
-    (if (true? (.authenticate rcon-client @password))
-      rcon-client
-      (println "Authentication failed!"))))
+    (or (.authenticate rcon-client @password)
+        (throw (Exception. "RCON-Authentication failed!")))
+    rcon-client))
 
 (defn run [cmd]
   (with-open [rcon-client (open-rcon-client)]
